@@ -63,7 +63,7 @@ const AddContactDialog: React.FC<AddContactDialogProps> = ({
 
     try {
       const token = localStorage.getItem('access_token');
-      const response = await fetch('http://localhost:8000/api/v1/contacts/', {
+      const response = await fetch('https://aisalesbackend.rtcknowledge.com/api/v1/contacts/', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

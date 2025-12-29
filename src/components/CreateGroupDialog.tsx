@@ -48,7 +48,7 @@ const CreateGroupDialog: React.FC<CreateGroupDialogProps> = ({
       
       console.log('Creating group with data:', formData);
       
-      const response = await fetch('http://localhost:8000/api/v1/contacts/groups/', {
+      const response = await fetch('https://aisalesbackend.rtcknowledge.com/api/v1/contacts/groups/', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

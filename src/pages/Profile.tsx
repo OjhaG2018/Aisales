@@ -49,7 +49,7 @@ const Profile: React.FC = () => {
       
       // Fetch user profile
       console.log('Fetching user profile...');
-      const userResponse = await fetch('http://localhost:8000/api/v1/auth/profile/', {
+      const userResponse = await fetch('https://aisalesbackend.rtcknowledge.com/api/v1/auth/profile/', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ const Profile: React.FC = () => {
       
       // Fetch business profile
       console.log('Fetching business profile...');
-      const businessResponse = await fetch('http://localhost:8000/api/v1/onboarding/business-profile/get/', {
+      const businessResponse = await fetch('https://aisalesbackend.rtcknowledge.com/api/v1/onboarding/business-profile/get/', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',

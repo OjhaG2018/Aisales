@@ -19,7 +19,7 @@ const TestGroupCreation: React.FC = () => {
       }
       
       // Test auth endpoint first
-      const authResponse = await fetch('http://localhost:8000/api/v1/auth/profile/', {
+      const authResponse = await fetch('https://aisalesbackend.rtcknowledge.com/api/v1/auth/profile/', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ const TestGroupCreation: React.FC = () => {
       
       console.log('Creating group with data:', testData);
       
-      const response = await fetch('http://localhost:8000/api/v1/contacts/groups/', {
+      const response = await fetch('https://aisalesbackend.rtcknowledge.com/api/v1/contacts/groups/', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

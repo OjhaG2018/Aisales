@@ -104,7 +104,7 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({
 
     try {
       const token = localStorage.getItem('access_token');
-      const response = await fetch(`http://localhost:8000/api/v1/contacts/${contact.id}/`, {
+      const response = await fetch(`https://aisalesbackend.rtcknowledge.com/api/v1/contacts/${contact.id}/`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

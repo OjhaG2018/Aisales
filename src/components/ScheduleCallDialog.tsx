@@ -62,7 +62,7 @@ const ScheduleCallDialog: React.FC<ScheduleCallDialogProps> = ({
       
       if (isBulk) {
         // Bulk schedule
-        const response = await fetch('http://localhost:8000/api/v1/calls/bulk_initiate/', {
+        const response = await fetch('https://aisalesbackend.rtcknowledge.com/api/v1/calls/bulk_initiate/', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -80,7 +80,7 @@ const ScheduleCallDialog: React.FC<ScheduleCallDialogProps> = ({
         }
       } else if (contact) {
         // Single schedule
-        const response = await fetch('http://localhost:8000/api/v1/calls/scheduled/', {
+        const response = await fetch('https://aisalesbackend.rtcknowledge.com/api/v1/calls/scheduled/', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,

@@ -116,7 +116,7 @@ const ContactsPage: React.FC = () => {
   const [importProgress, setImportProgress] = useState<number | null>(null);
   const [importStatus, setImportStatus] = useState<string>('');
 
-  const API_BASE = 'http://localhost:8000/api/v1';
+  const API_BASE = 'https://aisalesbackend.rtcknowledge.com/api/v1';
   const token = localStorage.getItem('access_token');
 
   const apiCall = async (url: string, options: RequestInit = {}) => {

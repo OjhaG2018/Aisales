@@ -55,7 +55,7 @@ const BusinessProfile: React.FC = () => {
     if (!refresh) return null;
     
     try {
-      const response = await fetch('http://localhost:8000/api/v1/auth/token/refresh/', {
+      const response = await fetch('https://aisalesbackend.rtcknowledge.com/api/v1/auth/token/refresh/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ refresh }),
@@ -79,7 +79,7 @@ const BusinessProfile: React.FC = () => {
       let token = localStorage.getItem('access_token');
       const selections = JSON.parse(localStorage.getItem('business_selections') || '{}');
       
-      let response = await fetch('http://localhost:8000/api/v1/onboarding/business-profile/', {
+      let response = await fetch('https://aisalesbackend.rtcknowledge.com/api/v1/onboarding/business-profile/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -100,7 +100,7 @@ const BusinessProfile: React.FC = () => {
       if (response.status === 401) {
         token = await refreshToken();
         if (token) {
-          response = await fetch('http://localhost:8000/api/v1/onboarding/business-profile/', {
+          response = await fetch('https://aisalesbackend.rtcknowledge.com/api/v1/onboarding/business-profile/', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
