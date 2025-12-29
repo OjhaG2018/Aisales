@@ -47,7 +47,7 @@ const LoginPage: React.FC = () => {
       const data = await response.json();
       
       // Store the access token
-      localStorage.setItem('token', data.tokens.access);
+      localStorage.setItem('access_token', data.tokens.access);
       localStorage.setItem('refreshToken', data.tokens.refresh);
       localStorage.setItem('user', JSON.stringify(data.user));
       

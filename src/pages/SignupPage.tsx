@@ -42,6 +42,14 @@ const SignupPage: React.FC = () => {
     }
 
     try {
+      console.log('Sending signup request with data:', {
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        company_name: formData.companyName,
+        phone: formData.phone
+      });
+      
       const response = await fetch('http://localhost:8000/api/v1/auth/signup/', {
         method: 'POST',
         headers: {
@@ -52,10 +60,8 @@ const SignupPage: React.FC = () => {
           last_name: formData.lastName,
           email: formData.email,
           password: formData.password,
-          company: {
-            name: formData.companyName,
-            phone: formData.phone
-          }
+          company_name: formData.companyName,
+          phone: formData.phone
         }),
       });
 
@@ -68,7 +74,20 @@ const SignupPage: React.FC = () => {
       } else {
         const errorData = await response.json();
         console.error('Signup error:', errorData);
-        setError(errorData.email?.[0] || errorData.detail || 'Registration failed');
+        
+        // Handle different types of errors
+        let errorMessage = 'Registration failed';
+        if (errorData.email && Array.isArray(errorData.email)) {
+          errorMessage = errorData.email[0];
+        } else if (errorData.detail) {
+          errorMessage = errorData.detail;
+        } else if (errorData.non_field_errors && Array.isArray(errorData.non_field_errors)) {
+          errorMessage = errorData.non_field_errors[0];
+        } else if (typeof errorData === 'string') {
+          errorMessage = errorData;
+        }
+        
+        setError(errorMessage);
       }
     } catch (err) {
       console.error('Signup error:', err);

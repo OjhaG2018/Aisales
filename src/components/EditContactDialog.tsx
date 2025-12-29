@@ -68,6 +68,7 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({
 
   useEffect(() => {
     if (contact && open) {
+      console.log('Setting form data for contact:', contact);
       setFormData({
         first_name: contact.first_name || '',
         last_name: contact.last_name || '',
@@ -81,6 +82,12 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({
       });
     }
   }, [contact, open]);
+
+  useEffect(() => {
+    if (!open) {
+      setError('');
+    }
+  }, [open]);
 
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -96,7 +103,7 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({
     setError('');
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`http://localhost:8000/api/v1/contacts/${contact.id}/`, {
         method: 'PUT',
         headers: {
@@ -124,6 +131,7 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({
 
   const handleClose = () => {
     setError('');
+    // Don't reset form data here to preserve it for debugging
     onClose();
   };
 

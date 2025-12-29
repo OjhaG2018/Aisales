@@ -10,7 +10,7 @@ const TestGroupCreation: React.FC = () => {
     setResult('');
     
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       console.log('Token from localStorage:', token);
       
       if (!token) {

@@ -44,7 +44,8 @@ import {
   Email as EmailIcon,
   Business as BusinessIcon,
   Delete as DeleteIcon,
-  Edit as EditIcon
+  Edit as EditIcon,
+  Call as CallIcon
 } from '@mui/icons-material';
 import AddContactDialog from '../components/AddContactDialog';
 import EditContactDialog from '../components/EditContactDialog';
@@ -116,7 +117,7 @@ const ContactsPage: React.FC = () => {
   const [importStatus, setImportStatus] = useState<string>('');
 
   const API_BASE = 'http://localhost:8000/api/v1';
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('access_token');
 
   const apiCall = async (url: string, options: RequestInit = {}) => {
     const response = await fetch(`${API_BASE}${url}`, {
@@ -240,6 +241,27 @@ const ContactsPage: React.FC = () => {
 
   const downloadTemplate = () => {
     window.open(`${API_BASE}/contacts/import/template/`, '_blank');
+  };
+
+  const handleStartCall = async (contactId: string) => {
+    try {
+      const response = await fetch('/test/contact-call/', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({contact_id: contactId})
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Call started:', result);
+        // Optionally redirect to voice chat page or show success message
+        window.open('/test/voice-chat/', '_blank');
+      } else {
+        console.error('Failed to start call');
+      }
+    } catch (error) {
+      console.error('Error starting call:', error);
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -557,6 +579,15 @@ const ContactsPage: React.FC = () => {
                     </TableCell>
                     <TableCell>
                       <Box sx={{ display: 'flex', gap: 1 }}>
+                        <Tooltip title="Start Call">
+                          <IconButton 
+                            size="small" 
+                            color="success"
+                            onClick={() => handleStartCall(contact.id)}
+                          >
+                            <CallIcon />
+                          </IconButton>
+                        </Tooltip>
                         <Tooltip title="Schedule Call">
                           <IconButton 
                             size="small" 

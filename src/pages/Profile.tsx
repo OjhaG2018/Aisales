@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Box,
   Container,
-  Paper,
   Typography,
   TextField,
   Button,
@@ -35,44 +34,65 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
     fetchProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem('access_token');
+      console.log('Token found:', !!token, token ? token.substring(0, 20) + '...' : 'none');
+      
+      if (!token) {
+        console.error('No access token found');
+        return;
+      }
       
       // Fetch user profile
+      console.log('Fetching user profile...');
       const userResponse = await fetch('http://localhost:8000/api/v1/auth/profile/', {
         headers: {
           'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
       });
 
+      console.log('User response status:', userResponse.status);
       if (userResponse.ok) {
         const userData = await userResponse.json();
+        console.log('User data received:', userData);
         setUserProfile({
-          email: userData.email,
-          firstName: userData.first_name,
-          lastName: userData.last_name,
-          company: userData.company
+          email: userData.email || '',
+          firstName: userData.first_name || '',
+          lastName: userData.last_name || '',
+          company: userData.company || { name: '', phone: '' }
         });
+      } else {
+        const errorText = await userResponse.text();
+        console.error('Failed to fetch user profile:', userResponse.status, errorText);
       }
       
       // Fetch business profile
+      console.log('Fetching business profile...');
       const businessResponse = await fetch('http://localhost:8000/api/v1/onboarding/business-profile/get/', {
         headers: {
           'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
       });
 
+      console.log('Business response status:', businessResponse.status);
       if (businessResponse.ok) {
         const businessData = await businessResponse.json();
+        console.log('Business data received:', businessData);
         setBusinessProfile(businessData);
+      } else {
+        const errorText = await businessResponse.text();
+        console.log('Business profile error:', businessResponse.status, errorText);
       }
       
-      setLoading(false);
     } catch (err) {
       console.error('Error fetching profile:', err);
+    } finally {
       setLoading(false);
     }
   };
@@ -80,10 +100,15 @@ const Profile: React.FC = () => {
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
-        <Typography>Loading...</Typography>
+        <Typography>Loading profile data...</Typography>
       </Box>
     );
   }
+
+  // Debug: Log the current state
+  console.log('Current userProfile state:', userProfile);
+  console.log('Current businessProfile state:', businessProfile);
+  console.log('Token exists:', !!localStorage.getItem('access_token'));
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -132,13 +157,13 @@ const Profile: React.FC = () => {
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <TextField
                 label="Company Name"
-                value={userProfile.company.name}
+                value={userProfile.company?.name || ''}
                 disabled
                 fullWidth
               />
               <TextField
                 label="Phone"
-                value={userProfile.company.phone}
+                value={userProfile.company?.phone || ''}
                 disabled
                 fullWidth
               />

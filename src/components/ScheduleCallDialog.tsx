@@ -58,7 +58,7 @@ const ScheduleCallDialog: React.FC<ScheduleCallDialogProps> = ({
     setError('');
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       
       if (isBulk) {
         // Bulk schedule

@@ -33,7 +33,7 @@ const ScheduleCallForm = () => {
     try {
       const response = await fetch('/api/v1/accounts/companies/', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
       const data = await response.json();
@@ -47,7 +47,7 @@ const ScheduleCallForm = () => {
     try {
       const response = await fetch(`/api/v1/contacts/?company=${companyId}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
       const data = await response.json();
@@ -61,7 +61,7 @@ const ScheduleCallForm = () => {
     try {
       const response = await fetch(`/api/v1/campaigns/?company=${companyId}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
       const data = await response.json();
@@ -88,7 +88,7 @@ const ScheduleCallForm = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         },
         body: JSON.stringify(formData)
       });

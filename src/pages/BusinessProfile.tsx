@@ -50,14 +50,36 @@ const BusinessProfile: React.FC = () => {
     setCompetitors(competitors.filter((_, i) => i !== index));
   };
 
+  const refreshToken = async () => {
+    const refresh = localStorage.getItem('refresh_token');
+    if (!refresh) return null;
+    
+    try {
+      const response = await fetch('http://localhost:8000/api/v1/auth/token/refresh/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refresh }),
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('access_token', data.access);
+        return data.access;
+      }
+    } catch (err) {
+      console.error('Token refresh failed:', err);
+    }
+    return null;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     try {
-      const token = localStorage.getItem('access_token');
+      let token = localStorage.getItem('access_token');
       const selections = JSON.parse(localStorage.getItem('business_selections') || '{}');
       
-      const response = await fetch('http://localhost:8000/api/v1/onboarding/business-profile/', {
+      let response = await fetch('http://localhost:8000/api/v1/onboarding/business-profile/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,6 +96,32 @@ const BusinessProfile: React.FC = () => {
           competitors: competitors,
         }),
       });
+
+      if (response.status === 401) {
+        token = await refreshToken();
+        if (token) {
+          response = await fetch('http://localhost:8000/api/v1/onboarding/business-profile/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              industry: selections.industry || 'retail',
+              subcategory: selections.subcategory || 'electronics',
+              business_type: selections.businessType || 'mobile',
+              business_model: selections.businessModel || 'independent',
+              description: formData.description,
+              target_audience: formData.targetAudience,
+              unique_selling_points: usps,
+              competitors: competitors,
+            }),
+          });
+        } else {
+          navigate('/login');
+          return;
+        }
+      }
 
       if (response.ok) {
         localStorage.removeItem('business_selections');

@@ -39,7 +39,7 @@ const CreateGroupDialog: React.FC<CreateGroupDialogProps> = ({
     setError('');
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       
       if (!token) {
         setError('Authentication token not found. Please login again.');
